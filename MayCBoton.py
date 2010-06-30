@@ -59,9 +59,9 @@ class MayCBoton(object):
 	
 	def ObtImagen(self):
 		return self.imagen
-	def CImagen(self,p_Directorio_Imagen=None,p_Imagen_Nombre=None,p_imagen=None):
-		if(p_Directorio_Imagen!=None and p_Imagen_Nombre!=None):
-			self.imagen=pygame.image.load(os.path.join(p_Directorio_Imagen,p_Imagen_Nombre))
+	def CImagen(self,p_imagen=None):
+		if(self.Directorio_Imagenes!=None and self.Imagen_Nombre!=None):
+			self.imagen=pygame.image.load(os.path.join(self.Directorio_Imagenes,self.Imagen_Nombre))
 			self.imagen=pygame.transform.scale(self.imagen,(self.Ancho,self.Alto))			
 		elif(p_imagen!=None):
 			self.imagen=p_imagen

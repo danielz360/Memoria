@@ -24,6 +24,8 @@ from MayCJNivel import MayCJMNivel
 from MayCLabel import MayCLabel
 from MayCJGlobalesI import MayCJMGlobalesI
 from MayCJGlobalesII import MayCJMGlobalesII
+from MayCBoton import MayCBoton
+
 
 class MayCJMTablero():
 
@@ -42,12 +44,22 @@ class MayCJMTablero():
 		self.ManejoxTeclado=False
 		self.Mostrarseleccionador = False
 		self.lblEstado=MayCLabel(self.Pantalla,'Estado:',1,(50,620),"Blanco")
+		
+		#Volver a Jugar
+		self.lblMensaje=MayCLabel(self.Pantalla,'Desea Volver a Jugar?','lblM',(450,270),"Blanco")
+		self.btnSi = MayCBoton(self.Pantalla,"btnSi","Si.png",'./MayRecursos',p_Coordenadas=(480,300),p_Tamano=(30,30))
+		self.btnNo = MayCBoton(self.Pantalla,"btnNo","No.png",'./MayRecursos',p_Coordenadas=(530,300),p_Tamano=(30,30))
+		
+		self.PregJugar=False
 		#self.NUECErrado As Boolean
 		self.Cargar()
 		self.Fondo=self.CFondo()
 		self.MemoriaCiclo()
 
-	def Cargar(self):
+	def Cargar(self,volvjuagar=False):
+		if(volvjuagar==True):
+			self.PregJugar=True
+			return
 		self.REValores()
 		self.Nivelf = MayCJMNivel(self.GlobalesI,self.GlobalesII)
 		self.Fondo=self.CFondo()
@@ -106,7 +118,7 @@ class MayCJMTablero():
 					self.Nivelf.Tarjetas[y][x].BtnTarjeta.CID(("Pic" + str(conindex)))
 					self.Nivelf.Tarjetas[y][x].BtnTarjeta.CTamano((self.Nivelf.ObtPicTamX(),self.Nivelf.ObtPicTamY()))
 					#Se pone la tarjeta boca abajo
-					self.Nivelf.Tarjetas[y][x].RegresoVolteoTarjeta()
+					self.Nivelf.Tarjetas[y][x].VolteoTarjeta()
 					a += 15
 					conindex += 1
 				
@@ -269,6 +281,13 @@ class MayCJMTablero():
 					self.estadoY, self.estadoX=self.Nivelf.Tarjetas[y][x].ObtIndices()
 					
 	def Tablero_PresDRaton(self,p_Evento):
+		if(self.PregJugar==True):
+			if(self.btnSi.Busqueda(p_Evento.pos, (0,0))):
+				self.VolveraJugar()
+			elif(self.btnNo.Busqueda(p_Evento.pos, (0,0))):	
+				self.run=False
+			return
+			
 		if self.GlobalesI.enEspera == True or self.ManejoxTeclado==True: 
 			return 
 		for y in range ((self.Nivelf.CoorY + 1 )):
@@ -276,7 +295,11 @@ class MayCJMTablero():
 				if(self.Nivelf.Tarjetas[y][x].Estado == False and self.Nivelf.Tarjetas[y][x].PresionDRaton(p_Evento)): 
 					self.PresionTarjeta()
 
-	
+	def VolveraJugar(self):
+		self.PregJugar=False
+		self.GlobalesI.nivel_actual=1
+		self.Cargar()
+		
 	def BusquedaTarjeta(self,p_Evento,p_indices=False):
 		for y in range ((self.Nivelf.CoorY + 1 )):
 			for x in range ((self.Nivelf.CoorX + 1 )):
@@ -304,7 +327,12 @@ class MayCJMTablero():
 		nueva_locaY = ((sizepicY - sizecur) / 2) + locpicY
 
 		self.Pantalla.blit(self.seleccionador,(nueva_locaX, nueva_locaY))
-				
+	
+	def ImprPreguntaFin(self):
+		self.lblMensaje.Insertar()
+		self.btnSi.Insertar()
+		self.btnNo.Insertar()
+						
 	def ImprTarjetas(self):
 		try:
 			for y in range ((self.Nivelf.CoorY + 1 )):
@@ -317,6 +345,12 @@ class MayCJMTablero():
 	def Imprimir(self):
 		#Insertar  Fondo
 		self.Pantalla.blit(self.Fondo,(0,0))
+		if(self.PregJugar==True):
+			#Imprime esto al final de los Niveles
+			self.ImprPreguntaFin()
+			pygame.display.update()
+			return
+		
 		self.ImprTarjetas()
 		#Insertar  Cursor
 		self.cursor_NLoca()
@@ -336,7 +370,7 @@ class MayCJMTablero():
 				if evento.type==pygame.MOUSEBUTTONDOWN:
 					self.Tablero_PresDRaton(evento)
 					self.Imprimir()
-				if evento.type == pygame.KEYDOWN:
+				if evento.type == pygame.KEYDOWN:		
 					self.Tablero_KeyDown(evento)																		
 					self.Imprimir()			
 				if(self.GlobalesI.enEspera==True):

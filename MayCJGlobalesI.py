@@ -27,14 +27,17 @@ class MayCJMGlobalesI(object):
 #End Region
 
 #Region "Funciones y Metodos Globales"
-    def AvanzarNvel(self,Nivelp):
+    def AvanzarNvel(self,Nivelp,volvjuagar=False):
         try:
             if (self.nivel_actual < 4) :
                 self.nivel_actual += 1
-                #Limpio los objetos del Tablero
-                self.RemObjetos(Nivelp)
-                Nivelp = None
+            #Limpio los objetos del Tablero
+            self.RemObjetos(Nivelp)
+            Nivelp = None
+            if(volvjuagar==False):
                 self.TableroCargar()
+            else:
+                self.TableroCargar(volvjuagar=True)                        
         except (NameError,ValueError):
             print "Error en AvanzarNvel" 
 

@@ -178,6 +178,8 @@ class MayCJMNivel(object):
             for a in range((X+1)):
                 if(Nivelp.Tarjetas[b][a].Estado == False): 
                     return
-
-        self.GlobalesI.AvanzarNvel(Nivelp)
+        if(self.GlobalesI.nivel_actual<4):
+            self.GlobalesI.AvanzarNvel(Nivelp)
+        else:
+            self.GlobalesI.AvanzarNvel(Nivelp,volvjuagar=True)    
 #End Region
