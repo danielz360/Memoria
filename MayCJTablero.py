@@ -50,7 +50,7 @@ class MayCJMTablero():
 		self.btnSi = MayCBoton(self.Pantalla,"btnSi","Si.png",'./MayRecursos',p_Coordenadas=(480,300),p_Tamano=(30,30))
 		self.btnNo = MayCBoton(self.Pantalla,"btnNo","No.png",'./MayRecursos',p_Coordenadas=(530,300),p_Tamano=(30,30))
 		
-		self.PregJugar=False
+		self.PregJugar=False	
 		#self.NUECErrado As Boolean
 		self.Cargar()
 		self.Fondo=self.CFondo()
@@ -171,8 +171,6 @@ class MayCJMTablero():
 			self.GlobalesI.ConEnter += 1
 								
 	def Tablero_KeyDown(self,p_Evento):
-		if self.GlobalesI.enEspera == True: 
-			return
 
 		if p_Evento.key ==pygame.K_LCTRL or p_Evento.key ==pygame.K_RCTRL:
 			self.Mostrarseleccionador = False
@@ -271,15 +269,18 @@ class MayCJMTablero():
 		return estadoA,estadoB
 
 	def Tablero_MovDRaton(self,p_Evento):
+		if(self.PregJugar==True):
+			return
+				
 		if self.GlobalesI.enEspera == True or self.ManejoxTeclado==True: 
 			return False
-
+		
 		for y in range ((self.Nivelf.CoorY + 1 )):
 			for x in range ((self.Nivelf.CoorX + 1 )):
 				if(self.Nivelf.Tarjetas[y][x].Estado == False and self.Nivelf.Tarjetas[y][x].MovimientoDRaton(p_Evento)):
 					self.GlobalesI.VeriVEsPR = False
 					self.estadoY, self.estadoX=self.Nivelf.Tarjetas[y][x].ObtIndices()
-					
+							
 	def Tablero_PresDRaton(self,p_Evento):
 		if(self.PregJugar==True):
 			if(self.btnSi.Busqueda(p_Evento.pos, (0,0))):
@@ -299,17 +300,6 @@ class MayCJMTablero():
 		self.PregJugar=False
 		self.GlobalesI.nivel_actual=1
 		self.Cargar()
-		
-	def BusquedaTarjeta(self,p_Evento,p_indices=False):
-		for y in range ((self.Nivelf.CoorY + 1 )):
-			for x in range ((self.Nivelf.CoorX + 1 )):
-				if(self.Nivelf.Tarjetas[y][x].Estado == False and self.Nivelf.Tarjetas[y][x].PresionDRaton(p_Evento)):
-					if(p_indices==True):
-						return (y,x) 
-					else:	 
-						return True
-		if(p_indices==True):
-			return False
 		
 	#El siguiente Procedimiento cálcula la locación del cursor en cada movimiento que se realice
 	def cursor_NLoca(self):
@@ -360,13 +350,14 @@ class MayCJMTablero():
 			
 	def MemoriaCiclo(self):
 			while self.run:
+				if self.GlobalesI.enEspera == True: 
+					return
 				#pygame.event.wait() hace que el while se quede dormido hasta que ocurra un evento
 				evento=pygame.event.wait()
 				if evento.type == pygame.QUIT:
 					self.run = False
 				if evento.type==pygame.MOUSEMOTION:	
 					self.Tablero_MovDRaton(evento)
-					self.Imprimir()
 				if evento.type==pygame.MOUSEBUTTONDOWN:
 					self.Tablero_PresDRaton(evento)
 					self.Imprimir()
