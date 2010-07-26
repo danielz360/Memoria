@@ -2,7 +2,6 @@ import pygame
 class MayCJMGlobalesII(object):
 #Region "Variables Globales"    
     def __init__(self):
-        pygame.init()
         self.Imagenes=[]
         self.ClaseImagen=1
         self.ImagenTrasera=None

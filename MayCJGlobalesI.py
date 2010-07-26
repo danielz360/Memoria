@@ -1,7 +1,7 @@
 class MayCJMGlobalesI(object):
 #Region "Variables Globales"
     def __init__(self):
-        self.nivel_actual = 4
+        self.nivel_actual = 1
         self.timermin = 0
         self.timerseg = 0
         #Tiempo de Espera para la Verificacion

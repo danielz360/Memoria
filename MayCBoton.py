@@ -25,8 +25,6 @@ import os.path
 
 class MayCBoton(object):
 	def __init__(self,p_Interface_Padre,p_ID,p_Imagen_Nombre,p_Directorio_Imagen,p_Coordenadas=(0,0),p_Tamano=(0,0),p_Habilitado=True):
-		#Inicializo SubMódulos de Pygamep_Mensaje
-		pygame.init()
 		#Propiedades
 		self.ID=p_ID
 		self.pos_x,self.pos_y=p_Coordenadas

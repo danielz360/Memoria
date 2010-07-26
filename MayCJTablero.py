@@ -118,7 +118,7 @@ class MayCJMTablero():
 					self.Nivelf.Tarjetas[y][x].BtnTarjeta.CID(("Pic" + str(conindex)))
 					self.Nivelf.Tarjetas[y][x].BtnTarjeta.CTamano((self.Nivelf.ObtPicTamX(),self.Nivelf.ObtPicTamY()))
 					#Se pone la tarjeta boca abajo
-					self.Nivelf.Tarjetas[y][x].VolteoTarjeta()
+					self.Nivelf.Tarjetas[y][x].RegresoVolteoTarjeta()
 					a += 15
 					conindex += 1
 				
